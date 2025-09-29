@@ -14,7 +14,9 @@ function Login() {
       .post("http://localhost:3001/login", { email, password })
       .then((result) => {
         console.log("Response from backend:", result.data);
+        if(result.data === "Success"){
         navigate("/home");
+        }
       })
       .catch((error) => console.log("Error:", error));
   };
