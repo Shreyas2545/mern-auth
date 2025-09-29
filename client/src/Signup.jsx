@@ -1,17 +1,21 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import axios from axios
+import {React , useState} from 'react';
+import { Link  } from 'react-router-dom';
+import axios from "axios"
+import { useNavigate } from 'react-router-dom';
 function Signup() {
-  const [name,setName] = useState()
-  const [email,setEmail] = useState()
-  const [password,setPassword] = useState()
+  const [name,setName] = useState("")
+  const [email,setEmail] = useState("")
+  const [password,setPassword] = useState("")
+  const navigate = useNavigate()
 
   const handleSubmit=(e)=>{
     e.preventDefault()
-    axios.post('',{name,email,password})
-    .then(result => console.log(result))
-    .catch(error => console.log(error));
-    
+    axios.post('http://localhost:3001/register',{name,email,password})
+    .then(result => {console.log("Response from backend :",result.data)
+      navigate('/login')
+    })
+    .catch(error => console.log("Error : ",error));
+     
   }
 
   return (
