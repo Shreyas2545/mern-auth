@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -10,15 +9,28 @@ function Login() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
     axios
       .post("http://localhost:3001/login", { email, password })
-      .then((result) => {
-        console.log("Response from backend:", result.data);
-        if(result.data === "Success"){
-        navigate("/home");
+      .then((res) => {
+        console.log("Backend response:", res.data);
+
+        // Check multiple possible response formats
+        const success =
+          res.data === "Success" ||
+          res.data.status === "Success" ||
+          res.data.message === "Success";
+
+        if (success) {
+          navigate("/home");
+        } else {
+          alert("Login failed! Please check your email and password.");
         }
       })
-      .catch((error) => console.log("Error:", error));
+      .catch((err) => {
+        console.log("Error:", err);
+        alert("Something went wrong. Please try again later.");
+      });
   };
 
   return (
@@ -77,7 +89,7 @@ function Login() {
 
         <p className="mt-10 text-center text-sm text-gray-500">
           Don't have an account?{" "}
-          <Link to="/signup" className="font-semibold text-indigo-600 hover:text-indigo-500">
+          <Link to="/register" className="font-semibold text-indigo-600 hover:text-indigo-500">
             Sign Up
           </Link>
         </p>
